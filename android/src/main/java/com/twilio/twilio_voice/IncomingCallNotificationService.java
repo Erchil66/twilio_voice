@@ -90,7 +90,7 @@ public class IncomingCallNotificationService extends Service {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "building notification for new phones");
-            return buildNotification(getApplicationName(context), getString(R.string.new_call, caller),
+            return buildNotification(getApplicationName(context), getString(R.string.new_call, fromId),
                     pendingIntent,
                     extras,
                     callInvite,

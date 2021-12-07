@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/samon/OneDrive/Desktop/Flutter Codes/twilio_voice/android/src/main/res/drawable/launch_background.xml" value="0.403125" />
         <entry key="..\:/Users/samon/OneDrive/Desktop/Flutter Codes/twilio_voice/android/src/main/res/layout/activity_answer.xml" value="0.2667572463768116" />
         <entry key="..\:/Users/samon/OneDrive/Desktop/Flutter Codes/twilio_voice/android/src/main/res/layout/activity_background_call.xml" value="0.2957427536231884" />
       </map>
