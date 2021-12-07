@@ -25,21 +25,21 @@
             android:orientation="vertical"
         android:gravity="center"
            >
-                <ImageView
-                    android:id="@+id/ivCallImage"
-                    android:layout_width="60dp"
-                    android:layout_height="90dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="12dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitEnd"
-                    app:layout_constraintBottom_toTopOf="@+id/tvCallInfo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout25"
-                    app:srcCompat="@drawable/splash_icon"
-                    app:tint="@color/mainColor" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/ivCallImage"-->
+<!--                    android:layout_width="60dp"-->
+<!--                    android:layout_height="90dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_marginEnd="12dp"-->
+<!--                    android:adjustViewBounds="true"-->
+<!--                    android:scaleType="fitEnd"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/tvCallInfo"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/linearLayout25"-->
+<!--                    app:srcCompat="@drawable/splash_icon"-->
+<!--                    app:tint="@color/mainColor" />-->
         <TextView
                 android:id="@+id/tvUserName"
                 android:layout_width="match_parent"
@@ -127,7 +127,7 @@
 
                 <ImageView
                         android:id="@+id/btnReject"
-                        android:layout_width="327dp"
+                        android:layout_width="275dp"
                         android:layout_height="56dp"
                         android:backgroundTint="@android:color/holo_red_light"
                         android:elevation="3dp"
@@ -151,7 +151,7 @@
 
                 <ImageView
                         android:id="@+id/btnAnswer"
-                    android:layout_width="327dp"
+                    android:layout_width="275dp"
                     android:layout_height="56dp"
                         android:backgroundTint="@android:color/holo_green_light"
                         android:elevation="3dp"
