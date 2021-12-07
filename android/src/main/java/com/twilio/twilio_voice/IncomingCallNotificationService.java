@@ -85,12 +85,12 @@ public class IncomingCallNotificationService extends Service {
         Context context = getApplicationContext();
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         Log.i(TAG, "Setting notification from, " + callInvite.getFrom());
-        String fromId = callInvite.getFrom().replace("client:", "");
+        String fromId = callInvite.getFrom().replace("phone_number:", "");
         String caller = preferences.getString(fromId, preferences.getString("defaultCaller", "Unknown caller"));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "building notification for new phones");
-            return buildNotification(getApplicationName(context), getString(R.string.new_call, caller),
+            return buildNotification(getApplicationName(context), getString(R.string.new_call, fromId),
                     pendingIntent,
                     extras,
                     callInvite,
