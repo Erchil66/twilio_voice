@@ -150,14 +150,40 @@ public class AnswerJavaActivity extends AppCompatActivity {
     }
 
 
+    // private void configCallUI() {
+    //     Log.d(TAG, "configCallUI");
+    //     if (activeCallInvite != null) {
+
+    //         String fromId = activeCallInvite.getFrom().replace("phone_number:", "");
+    //         SharedPreferences preferences = getApplicationContext().getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
+    //         String caller = preferences.getString(fromId, preferences.getString("defaultCaller", getString(R.string.unknown_caller)));
+    //         tvUserName.setText(fromId);
+
+    //         btnAnswer.setOnClickListener(new View.OnClickListener() {
+    //             @Override
+    //             public void onClick(View v) {
+    //                 Log.d(TAG, "onCLick");
+    //                 checkPermissionsAndAccept();
+    //             }
+    //         });
+
+    //         btnReject.setOnClickListener(new View.OnClickListener() {
+    //             @Override
+    //             public void onClick(View v) {
+    //                 rejectCallClickListener();
+    //             }
+    //         });
+    //     }
+    // }
     private void configCallUI() {
         Log.d(TAG, "configCallUI");
         if (activeCallInvite != null) {
-
-            String fromId = activeCallInvite.getFrom().replace("phone_number:", "");
+            String fromId = activeCallInvite.getFrom().replace("client:", "");
             SharedPreferences preferences = getApplicationContext().getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
+            Log.e(TAG, "From id : "+fromId);
             String caller = preferences.getString(fromId, preferences.getString("defaultCaller", getString(R.string.unknown_caller)));
-            tvUserName.setText(fromId);
+            Log.e(TAG, "Caller : "+caller);
+            tvUserName.setText(fromId.replace("_"," "));
 
             btnAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
