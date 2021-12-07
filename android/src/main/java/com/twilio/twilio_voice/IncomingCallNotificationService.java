@@ -254,11 +254,11 @@ public class IncomingCallNotificationService extends Service {
 
     private void buildMissedCallNotification(String callerId, String to) {
 
-        String fromId = callerId.replace("client:", "");
+        String fromId = callerId.replace("phone_number:", "");
         Context context = getApplicationContext();
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         String callerName = preferences.getString(fromId, preferences.getString("defaultCaller", "Unknown caller"));
-        String title = getString(R.string.notification_missed_call, callerName);
+        String title = getString(R.string.notification_missed_call, fromId);
 
 
         Intent returnCallIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
