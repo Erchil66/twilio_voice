@@ -31,6 +31,8 @@ import com.twilio.voice.Call;
 import com.twilio.voice.CallException;
 import com.twilio.voice.CallInvite;
 
+import java.util.Objects;
+
 
 public class AnswerJavaActivity extends AppCompatActivity {
 
@@ -58,7 +60,7 @@ public class AnswerJavaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_answer);
 
         tvUserName = (TextView) findViewById(R.id.tvUserName);
