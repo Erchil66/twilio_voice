@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +51,9 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_background_call);
 
         tvUserName = (TextView) findViewById(R.id.tvUserName);
@@ -102,7 +106,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
                 Log.d(TAG, "caller from");
                 Log.d(TAG, caller);
 
-                tvUserName.setText(caller);
+                tvUserName.setText(fromId);
                 tvCallStatus.setText("Call Connected");
                 Log.d(TAG, "handleCallIntent-");
                 configCallUI();
