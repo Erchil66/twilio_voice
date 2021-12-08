@@ -31,8 +31,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 //import com.twilio.voice.Call;
 import com.twilio.voice.CallInvite;
 
-import java.util.Objects;
-
 public class BackgroundCallJavaActivity extends AppCompatActivity {
 
     private static String TAG = "BackgroundCallActivity";
@@ -55,7 +53,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_background_call);
 
         tvUserName = (TextView) findViewById(R.id.tvUserName);
