@@ -86,7 +86,7 @@ public class IncomingCallNotificationService extends Service {
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         Log.i(TAG, "Setting notification from, " + callInvite.getFrom());
         String fromId = callInvite.getFrom().replace("from_firstname:", "");
-        String lastname = callInvite.getFrom().replace("from_lastname","");
+        String lastname = callInvite.getFrom().replace("from_lastname:","");
         String caller = preferences.getString(fromId, preferences.getString("defaultCaller", "Unknown caller"));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -256,7 +256,7 @@ public class IncomingCallNotificationService extends Service {
     private void buildMissedCallNotification(String callerId, String to) {
 
         String fromId = callerId.replace("from_firstname:", "");
-        String lastname = callerId.replace("from_lastname","");
+        String lastname = callerId.replace("from_lastname:","");
         Context context = getApplicationContext();
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         String callerName = preferences.getString(fromId, preferences.getString("defaultCaller", "Unknown caller"));
