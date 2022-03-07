@@ -468,11 +468,15 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
          */
         UserDefaults.standard.set(Date(), forKey: kCachedBindingDate)
         
-        var from:String = callInvite.from ?? defaultCaller
-        from = from.replacingOccurrences(of: "client:", with: "")
+        // var from:String = callInvite.from ??  defaultCaller
+        // from = from.replacingOccurrences(of: "client:", with: "")
+        var from:String = callInvite.from ??  ""
+         var fromx:String = callInvite.from ?? ""
+        from = from.replacingOccurrences(of: "from_firstname", with: "")
+        fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
         
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
-        reportIncomingCall(from: from, uuid: callInvite.uuid)
+        reportIncomingCall(from: from+" "+fromx, uuid: callInvite.uuid)
         self.callInvite = callInvite
     }
     
