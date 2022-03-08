@@ -491,14 +491,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
           * reportIncomingCall(from: "\(from) \(fromx)" as String?, uuid: callInvite.uuid
         */
         
-        var from:String?
+        var from:String = callInvite.customParameters["from_firsname"] ?? ""
         var fromx:String = callInvite.from ?? ""
         // from = from.replacingOccurrences(of: "from_firstname", with: "")
         // fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
-        let testmap =  callInvite.customParameters.map { 
-            let giveTest = $0.value["from_firstname"]
-            from = self.clients[giveTest]
-        }     
+        
 
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
         reportIncomingCall(from: from, fromx: fromx ,uuid: callInvite.uuid)
