@@ -491,10 +491,10 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
           * reportIncomingCall(from: "\(from) \(fromx)" as String?, uuid: callInvite.uuid
         */
         
-        var from:String?
-        var mapTest= callInvite.customParameters 
+        var from = ""
+        var mapTest = callInvite.customParameters 
         if let mapTestx = mapTest["from_firstname"]{
-            from = "\(mapTestx)"!
+          from = "\(mapTestx)"!
         }
  
         let firstname = from ?? self.clients["defaultCaller"] ?? self.defaultCaller
