@@ -492,9 +492,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         */
         
         var from = ""
-        var mapTest = callInvite.customParameters 
-        if let mapTestx = mapTest["from_firstname"]{
-          from = "\(mapTestx)"!
+        if let mapTestx = callInvite.customParameters["from_firstname"]! {
+          from = "\(mapTestx)"
         }
  
         let firstname = from ?? self.clients["defaultCaller"] ?? self.defaultCaller
