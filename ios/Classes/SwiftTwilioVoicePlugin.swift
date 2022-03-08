@@ -470,7 +470,9 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         UserDefaults.standard.set(Date(), forKey: kCachedBindingDate)
 
         
-        let from:String  = callInvite.callerInfo.description
+        var from:String  = ""
+        let mapArr = callInvite.callerInfo.value(forKey:"from_firstname")
+        from = "\(String(describing: mapArr) )"
         var fromx:String = callInvite.from ?? ""
         // from = from.replacingOccurrences(of: "from_firstname", with: "")
         fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
