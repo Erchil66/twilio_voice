@@ -493,7 +493,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
         var from:String = ""
         let mapArr = callInvite.customParameters.map {
-            from = mapArr["from_firstname"]!
+           from =  $0["from_firstname"]!
         }
         var fromx:String = callInvite.from ?? ""
         // from = from.replacingOccurrences(of: "from_firstname", with: "")
@@ -501,7 +501,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
 
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
-        reportIncomingCall(from: reportIncomingCall, fromx: fromx ,uuid: callInvite.uuid)
+        reportIncomingCall(from: from, fromx: fromx ,uuid: callInvite.uuid)
         self.callInvite = callInvite
     }
     
@@ -794,8 +794,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
         let callUpdate = CXCallUpdate()
         callUpdate.remoteHandle = callHandle
-         callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
-        //callUpdate.localizedCallerName = clients[combine] ?? self.clients["defaultCaller"] ?? defaultCaller
+        // callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
+        callUpdate.localizedCallerName = clients[combine] ?? self.clients["defaultCaller"] ?? defaultCaller
         callUpdate.supportsDTMF = true
         callUpdate.supportsHolding = true
         callUpdate.supportsGrouping = false
