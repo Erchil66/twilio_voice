@@ -472,7 +472,6 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
         var from  = callInvite.callerInfo
         var fromx:String = callInvite.from ?? ""
-        from = from.replacingOccurrences(of: "from_firstname", with: "")
         fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
         
 
@@ -764,7 +763,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         }
     }
     
-    func reportIncomingCall(from: String,fromx: String, uuid: UUID) {
+    func reportIncomingCall(from: TVOCallerInfo,fromx: String, uuid: UUID) {
         let combine = "\(from) \(fromx)"
         let callHandle = CXHandle(type: .generic,value: combine)
         
