@@ -468,36 +468,12 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
          * sent to this device/identity pair.
          */
         UserDefaults.standard.set(Date(), forKey: kCachedBindingDate)
-         /**
-          * var from:String = callInvite.from ??  defaultCaller
-          * from = from.replacingOccurrences(of: "client:", with: "")
-          var firstname:String?
-            var lastname:String? 
-             var from:String = callInvite.customParameters ?? ""
-         var fromx:String = callInvite.customParameters ?? ""
 
-        if var from = from{
-           from = from.replacingOccurrences(of: "from_firstname",with:"")
-            firstname = self.clients[from]
-        }
-
-        if var fromx = fromx{
-             fromx = fromx.replacingOccurrences(of: "from_lastname",with:"")
-            lastname = self.clients[fromx]
-        }
-         var fromx1:String = callInvite.from ?? ""
-          fromx1 = fromx1.replacingOccurrences(of: "from_lastname", with: "")
         
-          * reportIncomingCall(from: "\(from) \(fromx)" as String?, uuid: callInvite.uuid
-        */
-        
-        var from:String = ""
-        let _: ()? = callInvite.customParameters.map {
-            from = $0["from_firstname"]!
-        }
+        var from:String  = callInvite.callerInfo ?? ""
         let fromx:String = callInvite.from ?? ""
-        // from = from.replacingOccurrences(of: "from_firstname", with: "")
-        // fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
+        from = from.replacingOccurrences(of: "from_firstname", with: "")
+        fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
         
 
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
@@ -794,8 +770,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
         let callUpdate = CXCallUpdate()
         callUpdate.remoteHandle = callHandle
-        // callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
-        callUpdate.localizedCallerName = clients[combine] ?? self.clients["defaultCaller"] ?? defaultCaller
+        callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
+        //callUpdate.localizedCallerName = clients[combine] ?? self.clients["defaultCaller"] ?? defaultCaller
         callUpdate.supportsDTMF = true
         callUpdate.supportsHolding = true
         callUpdate.supportsGrouping = false
