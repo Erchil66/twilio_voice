@@ -468,9 +468,30 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
          * sent to this device/identity pair.
          */
         UserDefaults.standard.set(Date(), forKey: kCachedBindingDate)
-         
+         /**
+          * var from:String = callInvite.from ??  defaultCaller
+          * from = from.replacingOccurrences(of: "client:", with: "")
+          var firstname:String?
+            var lastname:String? 
+             var from:String = callInvite.customParameters ?? ""
+         var fromx:String = callInvite.customParameters ?? ""
+
+        if var from = from{
+           from = from.replacingOccurrences(of: "from_firstname",with:"")
+            firstname = self.clients[from]
+        }
+
+        if var fromx = fromx{
+             fromx = fromx.replacingOccurrences(of: "from_lastname",with:"")
+            lastname = self.clients[fromx]
+        }
+         var fromx1:String = callInvite.from ?? ""
+          fromx1 = fromx1.replacingOccurrences(of: "from_lastname", with: "")
         
-        let from = callInvite.customParameters["from_firsname"]!
+          * reportIncomingCall(from: "\(from) \(fromx)" as String?, uuid: callInvite.uuid
+        */
+        
+        var from:String = callInvite.customParameters["from_firsname"]! ?? self.clients["defaultCaller"] ?? self.defaultCaller
         var fromx:String = callInvite.from ?? ""
         // from = from.replacingOccurrences(of: "from_firstname", with: "")
         // fromx = fromx.replacingOccurrences(of: "from_lastname", with: "")
