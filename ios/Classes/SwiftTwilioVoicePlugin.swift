@@ -467,11 +467,14 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
          * sent to this device/identity pair.
          */
         UserDefaults.standard.set(Date(), forKey: kCachedBindingDate)
+        
 
         var fromClient:String = callInvite.from
         fromClient = fromClient.replacingOccurrences(of: "client:", with: "")
+        
         var fromPhone:String = callInvite.from
         fromPhone =  fromClient.replacingOccurrences(of: "phone_number:", with: "") 
+        
         let from:String = fromClient ?? fromPhone
         // from = from.replacingOccurrences(of: "client:", with: "")
         
