@@ -472,8 +472,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         
         var from:String  =  callInvite.from ?? ""
         let fromx:String = callInvite.customParameters!["firstname"] ?? ""
-        // from = from.replacingOccurrences(of: "from_firstname", with: "")
-    
+        // Start at here
         from = from.replacingOccurrences(of: "client:" , with: "");
         
 
