@@ -473,8 +473,6 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let from:String?  =  callInvite.customParameters!["firstname"] ?? ""
         let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
         // Start at here
-        from = from.replacingOccurrences(of: "client:" , with: "");
-        
 
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
         reportIncomingCall(from: from!, fromx: fromx! ,uuid: callInvite.uuid)
