@@ -769,12 +769,12 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let firstname = from.capitalized
         let lastname = fromx.capitalized
         let combine = "\(firstname) \(lastname)"
-        let callHandle = CXHandle(type: .generic,value: combine)
+        let callHandle = CXHandle(type: .generic,value: combine.capitalized)
         
         let callUpdate = CXCallUpdate()
         callUpdate.remoteHandle = callHandle
         //callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
-        callUpdate.localizedCallerName = clients[combine] ?? self.clients["defaultCaller"] ?? defaultCaller
+        callUpdate.localizedCallerName = combine  ?? self.clients["defaultCaller"] ?? defaultCaller
         callUpdate.supportsDTMF = true
         callUpdate.supportsHolding = true
         callUpdate.supportsGrouping = false
