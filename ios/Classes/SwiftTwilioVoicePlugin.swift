@@ -761,9 +761,19 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             self.callKitProvider.reportCall(with: uuid, updated: callUpdate)
         }
     }
+
+    extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+}
     
     func reportIncomingCall(from: String,fromx: String, uuid: UUID) {
-        let combine = "\(from.capitalized) \(fromx.capitalized)"
+        let combine = "\(from.capitalizingFirstLetter()) \(fromx.capitalizingFirstLetter())"
         let callHandle = CXHandle(type: .generic,value: combine)
         
         let callUpdate = CXCallUpdate()
