@@ -5,6 +5,7 @@ import PushKit
 import TwilioVoice
 import CallKit
 import UserNotifications
+import Foundation
 
 public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHandler, PKPushRegistryDelegate, NotificationDelegate, CallDelegate, AVAudioPlayerDelegate, CXProviderDelegate {
     
@@ -765,8 +766,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     
     
     func reportIncomingCall(from: String,fromx: String, uuid: UUID) {
-        let firstname = from.localizedCapitalized
-        let lastname = fromx.localizedCapitalized
+        let firstname = from.capitalized
+        let lastname = fromx.capitalized
         let combine = "\(firstname) \(lastname)"
         let callHandle = CXHandle(type: .generic,value: combine)
         
