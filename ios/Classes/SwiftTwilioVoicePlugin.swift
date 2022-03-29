@@ -775,12 +775,12 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let combine = "\(firstname) \(lastname)"
         var finale:String = combine.isEmpty ? number : combine 
         // Test from here
-        let callHandle = CXHandle(type: .generic,value: combine.capitalized)
+        let callHandle = CXHandle(type: .generic,value: finale.capitalized)
         
         let callUpdate = CXCallUpdate()
         callUpdate.remoteHandle = callHandle
         //callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
-        callUpdate.localizedCallerName = combine  ?? number ?? defaultCaller
+        callUpdate.localizedCallerName = finale  ?? number ?? defaultCaller
         callUpdate.supportsDTMF = true
         callUpdate.supportsHolding = true
         callUpdate.supportsGrouping = false
