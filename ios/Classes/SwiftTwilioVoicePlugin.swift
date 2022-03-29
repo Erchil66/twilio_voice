@@ -773,7 +773,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let lastname = fromx.capitalized
         let number = fromx1
         let combine = "\(firstname) \(lastname)"
-        var finale:String = combine.isEmpty ? number : combine 
+        let finale:String = combine.trimmingCharacters(in: .whitespaces).isEmpty ? number : combine 
         // Test from here
         let callHandle = CXHandle(type: .generic,value: finale.capitalized)
         
