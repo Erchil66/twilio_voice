@@ -768,9 +768,9 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     
     
     func reportIncomingCall(from: String,fromx: String, fromx1: String, uuid: UUID) {
-        var 
+         
         let firstname = from.capitalized
-        let lastname = fromx.capitalize
+        let lastname = fromx.capitalized
         let number = fromx1
         let combine = "\(firstname) \(lastname)" ?? number
         // Test from here
