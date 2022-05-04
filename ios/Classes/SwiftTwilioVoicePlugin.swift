@@ -162,7 +162,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             return;
         }else if flutterCall.method == "getParams"{
              
-             print("Print Me | \(self.call!.from)");
+             print("Print Me | \(self.call?.from)");
               print("Print Me | \(self.callInvite?.from)");
            
             result(self.call != nil ? self.call.from : nil)
