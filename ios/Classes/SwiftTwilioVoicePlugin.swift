@@ -165,7 +165,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
              print("Print Me | \(self.call?.from)");
               print("Print Me | \(self.callInvite?.from)");
            
-            result(self.call != nil ? self.call.from : nil)
+            result(self.call != nil ? self.call!.from : nil)
               return;
         }
 
