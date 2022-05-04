@@ -267,9 +267,9 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
 
     func returnParamsTry() -> String
     {
-        let from:String?  =  callInvite?.customParameters!["firstname"] ?? ""
-        let fromx:String? = callInvite?.customParameters!["lastname"] ?? ""
-        var fromx1:String = callInvite?.from ?? ""
+        let from:String?  =  self.callInvite?.customParameters!["firstname"] ?? ""
+        let fromx:String? = self.callInvite?.customParameters!["lastname"] ?? ""
+        var fromx1:String = self.callInvite?.from ?? ""
         fromx1 = fromx1.replacingOccurrences(of: "client:", with: "")
         // the return result is string yep
         return  "\(from) \(fromx)"  ?? fromx1 ?? defaultCaller
