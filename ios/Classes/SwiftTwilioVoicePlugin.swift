@@ -163,7 +163,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             return;
         }else if flutterCall.method == "getParams"{
             
-            let haveData:String? = finaleSTL!.trimmingCharacters(in: .whitespaces).isEmpty ? "" : finaleSTL
+            let haveData:String = finaleSTL?.trimmingCharacters(in: .whitespaces).isEmpty ? "" : finaleSTL
             ///
             result(haveData)
             return;
@@ -274,7 +274,6 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             self.userInitiatedDisconnect = true
             performEndCallAction(uuid: self.call!.uuid!)            
         } else {
-            self.finaleSTL = self.call.from
             let uuid = UUID()
             
             self.checkRecordPermission { (permissionGranted) in
