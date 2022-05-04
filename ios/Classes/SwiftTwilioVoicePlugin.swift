@@ -164,7 +164,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             // guard let caller = arguments["getParams"] as? String else {return}
             // let phoneNumber = args["getParams"] as! String
              
-            result(self.returnParamsTry())
+            result(self.returnParamsTry(callInvite : CallInvite) as? String)
               return
         }
 
@@ -265,14 +265,19 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         result(true)
     }
 
-    func returnParamsTry() -> String
+    func returnParamsTry(callInvite : CallInvite) -> String
     {
-        let from:String?  =  self.callInvite?.customParameters!["firstname"] ?? ""
-        let fromx:String? = self.callInvite?.customParameters!["lastname"] ?? ""
-        var fromx1:String = self.callInvite?.from ?? ""
+        let from:String?  = callInvite.customParameters!["firstname"] ?? ""
+        let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
+        var fromx1:String = callInvite.from ?? ""
         fromx1 = fromx1.replacingOccurrences(of: "client:", with: "")
         // the return result is string yep
-        return  "\(from) \(fromx)"  ?? fromx1 ?? defaultCaller
+        let combine =  "\(from) \(fromx)" 
+        let finale: String =  combine.trimmingCharacters(in: .whitespaces).isEmpty ? fromx1 : combine   
+
+
+        self.callInvite = callInvite
+        return  finale
     }
     
     func makeCall(to: String)
