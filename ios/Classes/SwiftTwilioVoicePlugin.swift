@@ -21,6 +21,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     private var clients: [String:String]!
     
     var accessToken:String?
+    var finaleSTL:String?
     var identity = "alice"
     var callTo: String = "error"
     /** var defaultCaller = "Unknown Caller" */
@@ -161,12 +162,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             result(self.call == nil ? nil : self.call!.sid);
             return;
         }else if flutterCall.method == "getParams"{
-             
-             print("Print Me | \(self.call?.from)");
-              print("Print Me | \(self.callInvite?.from)");
-           
-            result(self.call != nil ? self.call!.from : nil)
-              return;
+            
+            let haveData:String? = finaleSTL.trimmingCharacters(in: .whitespaces).isEmpty ? "" : finaleSTL
+            
+            result(haveData)
+            return;
         }
 
         else if flutterCall.method == "isOnCall"
@@ -783,7 +783,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let lastname = fromx.capitalized
         let number = fromx1
         let combine = "\(firstname) \(lastname)"
-        let finale:String = combine.trimmingCharacters(in: .whitespaces).isEmpty ? number : combine 
+        let finale:String = combine.trimmingCharacters(in: .whitespaces).isEmpty ? number : combine
+        self.finaleSTL = finale 
         // Test from here
         let callHandle = CXHandle(type: .generic,value: finale.capitalized)
         
