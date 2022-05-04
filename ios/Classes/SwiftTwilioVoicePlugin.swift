@@ -161,10 +161,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             result(self.call == nil ? nil : self.call!.sid);
             return;
         }else if flutterCall.method == "getParams"{
-        
-             self.sendPhoneCallEvents(description: "Call Norm |\(self.call!.from)", isError: false)
-              self.sendPhoneCallEvents(description: "Call Norm 1|\(self.callInvite?.from)", isError: false)
-            result(self.call == nil ? "" :self.call!.from)
+             
+             print("Print Me | \(self.call.from)");
+              print("Print Me | \(self.callInvite.from)");
+           
+            result(self.call != nil ? self.call.from : nil)
               return;
         }
 
