@@ -161,11 +161,10 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             result(self.call == nil ? nil : self.call!.sid);
             return;
         }else if flutterCall.method == "getParams"{
-            // guard let caller = arguments["getParams"] as? String else {return}
-            // let phoneNumber = args["getParams"] as! String
+        
              
-            result(self.returnParamsTry(callInvite : CallInvite) as? String)
-              return
+            result(self.call == nil ? "" :self.call!.from)
+              return;
         }
 
         else if flutterCall.method == "isOnCall"
@@ -265,20 +264,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         result(true)
     }
 
-    func returnParamsTry(callInvite : CallInvite) -> String
-    {
-        let from:String?  = callInvite.customParameters!["firstname"] ?? ""
-        let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
-        var fromx1:String = callInvite.from ?? ""
-        fromx1 = fromx1.replacingOccurrences(of: "client:", with: "")
-        // the return result is string yep
-        let combine =  "\(from) \(fromx)" 
-        let finale: String =  combine.trimmingCharacters(in: .whitespaces).isEmpty ? fromx1 : combine   
-
-
-        self.callInvite = callInvite
-        return  finale
-    }
+   
     
     func makeCall(to: String)
     {
