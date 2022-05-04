@@ -274,6 +274,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             self.userInitiatedDisconnect = true
             performEndCallAction(uuid: self.call!.uuid!)            
         } else {
+            self.finaleSTL = self.call.from
             let uuid = UUID()
             
             self.checkRecordPermission { (permissionGranted) in
@@ -490,6 +491,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
         reportIncomingCall(from: from!, fromx: fromx! ,fromx1 : fromx1,uuid: callInvite.uuid)
         self.callInvite = callInvite
+        self.finaleSTL = "\(from) \(fromx)".trimmingCharacters(in: .whitespaces).isEmpty ? fromx1 : "\(from) \(fromx)"
     }   
     
     func formatCustomParams(params: [String:Any]?)->String{
@@ -784,14 +786,14 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let number = fromx1
         let combine = "\(firstname) \(lastname)"
         let finale:String = combine.trimmingCharacters(in: .whitespaces).isEmpty ? number : combine
-        self.finaleSTL = finale 
+        
         // Test from here
         let callHandle = CXHandle(type: .generic,value: finale.capitalized)
         
         let callUpdate = CXCallUpdate()
         callUpdate.remoteHandle = callHandle
         //callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
-        callUpdate.localizedCallerName = finale  ?? number ?? defaultCaller
+        callUpdate.localizedCallerName = finale
         callUpdate.supportsDTMF = true
         callUpdate.supportsHolding = true
         callUpdate.supportsGrouping = false
