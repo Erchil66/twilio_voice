@@ -164,7 +164,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             // guard let caller = arguments["getParams"] as? String else {return}
             // let phoneNumber = args["getParams"] as! String
              
-            result(self.returnParamsTry())
+            result(self.returnParamsTry(callInvite: CallInvite))
               return
         }
 
@@ -265,7 +265,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         result(true)
     }
 
-    func returnParamsTry()
+    func returnParamsTry(callInvite : CallInvite) -> String
     {
         let from:String?  =  callInvite.customParameters!["firstname"] ?? ""
         let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
