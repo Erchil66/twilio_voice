@@ -131,12 +131,12 @@ class TwilioVoice {
 
       // source: https://www.twilio.com/docs/api/errors/31603
       // The callee does not wish to participate in the call.
-      if(tokens[1].contains("31603")) {
+      if (tokens[1].contains("31603")) {
         return CallEvent.declined;
-      } else if(tokens.toString().toLowerCase().contains("call rejected")) {
+      } else if (tokens.toString().toLowerCase().contains("call rejected")) {
         // Android call reject from string: "LOG|Call Rejected"
         return CallEvent.declined;
-      } else if(tokens.toString().toLowerCase().contains("rejecting call")) {
+      } else if (tokens.toString().toLowerCase().contains("rejecting call")) {
         // iOS call reject froms tring: "LOG|provider:performEndCallAction: rejecting call"
         return CallEvent.declined;
       }
@@ -151,7 +151,7 @@ class TwilioVoice {
           createCallFromState(state, callDirection: CallDirection.outgoing);
 
       print(
-          'Ringing - From: ${call._activeCall!.from}, To: ${call._activeCall!.to}, Direction: ${call._activeCall!.callDirection}');
+          'Ringing - From: ${call._activeCall!.from}, To: ${call._activeCall!.to}, Direction: ${call._activeCall!.callDirection} ${call._activeCall!.customParams!['firstname']}');
 
       return CallEvent.ringing;
     } else if (state.startsWith("Answer")) {
@@ -246,6 +246,11 @@ class Call {
     return _channel.invokeMethod('makeCall', options);
   }
 
+  //Get params Try
+  Future<String?> getParams() {
+    return _channel.invokeMethod<String?>('getParams', <String, dynamic>{});
+  }
+
   /// Hangs active call
   Future<bool?> hangUp() {
     return _channel.invokeMethod('hangUp', <String, dynamic>{});
@@ -259,7 +264,8 @@ class Call {
 
   /// Gets the active call's SID. This will be null until the first Ringing event occurs
   Future<String?> getSid() {
-    return _channel.invokeMethod<String?>('call-sid', <String, dynamic>{}).then<String?>((String? value) => value);
+    return _channel.invokeMethod<String?>('call-sid',
+        <String, dynamic>{}).then<String?>((String? value) => value);
   }
 
   /// Answers incoming call
