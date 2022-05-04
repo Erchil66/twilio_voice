@@ -164,7 +164,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         }else if flutterCall.method == "getParams"{
             
             let haveData:String? = finaleSTL!.trimmingCharacters(in: .whitespaces).isEmpty ? "" : finaleSTL
-            
+            ///
             result(haveData)
             return;
         }
