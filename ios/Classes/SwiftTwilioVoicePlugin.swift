@@ -162,7 +162,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             return;
         }else if flutterCall.method == "getParams"{
         
-             
+             self.sendPhoneCallEvents(description: "Call Norm |\(self.call!.from)", isError: false)
+              self.sendPhoneCallEvents(description: "Call Norm 1|\(self.callInvite?.from)", isError: false)
             result(self.call == nil ? "" :self.call!.from)
               return;
         }
