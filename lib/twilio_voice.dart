@@ -151,7 +151,7 @@ class TwilioVoice {
           createCallFromState(state, callDirection: CallDirection.outgoing);
 
       print(
-          'Ringing - From: ${call._activeCall!.from}, To: ${call._activeCall!.to}, Direction: ${call._activeCall!.callDirection} ${call._activeCall!.customParams!['firstname']}');
+          'Ringing - From: ${call._activeCall!.from}, To: ${call._activeCall!.to}, Direction: ${call._activeCall!.callDirection}');
 
       return CallEvent.ringing;
     } else if (state.startsWith("Answer")) {
