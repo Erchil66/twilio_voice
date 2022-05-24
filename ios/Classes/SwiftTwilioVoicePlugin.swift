@@ -767,10 +767,10 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             //callUpdate.remoteHandle = callHandle
             callUpdate.localizedCallerName = self.clients[handle] ?? self.clients["defaultCaller"] ?? self.defaultCaller
             callUpdate.supportsDTMF = false
-            // callUpdate.supportsHolding = false
-            // callUpdate.supportsGrouping = false
-            // callUpdate.supportsUngrouping = false
-            // callUpdate.hasVideo = false
+            callUpdate.supportsHolding = false
+            callUpdate.supportsGrouping = false
+            callUpdate.supportsUngrouping = false
+            callUpdate.hasVideo = false
             
             self.callKitProvider.reportCall(with: uuid, updated: callUpdate)
         }
