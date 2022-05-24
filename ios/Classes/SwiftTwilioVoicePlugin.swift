@@ -764,13 +764,14 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             self.sendPhoneCallEvents(description: "LOG|StartCallAction transaction request successful", isError: false)
             
             let callUpdate = CXCallUpdate()
-            //callUpdate.remoteHandle = callHandle
+            // callUpdate.remoteHandle = callHandle
+           // callUpdate.remoteHandle = nil
             callUpdate.localizedCallerName = self.clients[handle] ?? self.clients["defaultCaller"] ?? self.defaultCaller
-            callUpdate.supportsDTMF = false
-            callUpdate.supportsHolding = false
-            callUpdate.supportsGrouping = false
-            callUpdate.supportsUngrouping = false
-            callUpdate.hasVideo = false
+           callUpdate.supportsDTMF = true
+        callUpdate.supportsHolding = false
+        callUpdate.supportsGrouping = false
+        callUpdate.supportsUngrouping = false
+        callUpdate.hasVideo = false
             
             self.callKitProvider.reportCall(with: uuid, updated: callUpdate)
         }
@@ -790,11 +791,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let callHandle = CXHandle(type: .generic,value: finale.capitalized)
         
         let callUpdate = CXCallUpdate()
-        callUpdate.remoteHandle = callHandle
+        //callUpdate.remoteHandle = nil
         //callUpdate.localizedCallerName = clients[from] ?? self.clients["defaultCaller"] ?? defaultCaller
         callUpdate.localizedCallerName = finale
         callUpdate.supportsDTMF = true
-        callUpdate.supportsHolding = true
+        callUpdate.supportsHolding = false
         callUpdate.supportsGrouping = false
         callUpdate.supportsUngrouping = false
         callUpdate.hasVideo = false
