@@ -269,11 +269,12 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
    
     
     func makeCall(to: String)
-    {
-        if (self.call != nil && self.call?.state == .connected) {
-            self.userInitiatedDisconnect = true
-            performEndCallAction(uuid: self.call!.uuid!)            
-        } else {
+    {  
+        // # to call unli
+        // if (self.call != nil && self.call?.state == .connected) {
+        //     self.userInitiatedDisconnect = true
+        //     performEndCallAction(uuid: self.call!.uuid!)            
+        // } else {
             let uuid = UUID()
             
             self.checkRecordPermission { (permissionGranted) in
@@ -313,8 +314,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
                 } else {
                     self.performStartCallAction(uuid: uuid, handle: to)
                 }
-            }
-        }
+        //     }
+        // }
     }
     
     func checkRecordPermission(completion: @escaping (_ permissionGranted: Bool) -> Void) {
