@@ -273,8 +273,9 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         if (self.call != nil && self.call?.state == .connected) {
             // self.userInitiatedDisconnect = true
             // performEndCallAction(uuid: self.call!.uuid!)    
-
+            
             // From  
+                let uuid = UUID()
                 self.performStartCallAction(uuid: uuid, handle: to)
             /// From    
         } else {
