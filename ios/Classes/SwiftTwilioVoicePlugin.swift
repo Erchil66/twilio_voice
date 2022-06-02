@@ -812,7 +812,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     }
     
     func performEndCallAction(uuid: UUID) {
-        
+        // edited from here
         self.sendPhoneCallEvents(description: "LOG|performEndCallAction method invoked", isError: false)
         
         let endCallAction = CXEndCallAction(call: uuid)
@@ -826,7 +826,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             } else if let call = self.call {
             self.sendPhoneCallEvents(description: "LOG|provider:performEndCallAction: disconnecting call", isError: false)
             call.disconnect()
-        }
+            }
         }
     }
     
