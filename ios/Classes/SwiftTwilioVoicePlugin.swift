@@ -821,11 +821,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         callKitCallController.request(transaction) { error in
             if let error = error {
                 self.sendPhoneCallEvents(description: "End Call Failed: \(error.localizedDescription).", isError: true)
-            } else {
-                self.sendPhoneCallEvents(description: "Call Ended", isError: false)
-            } else if let call = self.call {
+            }  else if let call = self.call {
             self.sendPhoneCallEvents(description: "LOG|provider:performEndCallAction: disconnecting call", isError: false)
             call.disconnect()
+            }else {
+                self.sendPhoneCallEvents(description: "Call Ended", isError: false)
             }
         }
     }
