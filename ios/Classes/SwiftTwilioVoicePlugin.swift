@@ -271,8 +271,51 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     func makeCall(to: String)
     {  
         if (self.call != nil && self.call?.state == .connected) {
-            self.userInitiatedDisconnect = true
-            performEndCallAction(uuid: self.call!.uuid!)            
+            // self.userInitiatedDisconnect = true
+            // performEndCallAction(uuid: self.call!.uuid!)    
+
+            // From  
+            var uuid = UUID()
+            
+            self.checkRecordPermission { (permissionGranted) in
+                if (!permissionGranted) {
+                    let alertController: UIAlertController = UIAlertController(title: String(format:  NSLocalizedString("mic_permission_title", comment: "") , SwiftTwilioVoicePlugin.appName),
+                                                                               message: NSLocalizedString( "mic_permission_subtitle", comment: ""),
+                                                                               preferredStyle: .alert)
+                    
+                    let continueWithMic: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_continue_no_mic", comment: ""),
+                                                                       style: .default,
+                                                                       handler: { (action) in
+                                                                        self.performStartCallAction(uuid: uuid, handle: to)
+                                                                       })
+                    alertController.addAction(continueWithMic)
+                    
+                    let goToSettings: UIAlertAction = UIAlertAction(title:NSLocalizedString("btn_settings", comment: ""),
+                                                                    style: .default,
+                                                                    handler: { (action) in
+                                                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                                                                                  options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: false],
+                                                                                                  completionHandler: nil)
+                                                                    })
+                    alertController.addAction(goToSettings)
+                    
+                    let cancel: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_cancel", comment: ""),
+                                                              style: .cancel,
+                                                              handler: { (action) in
+                                                                //self.toggleUIState(isEnabled: true, showCallControl: false)
+                                                                //self.stopSpin()
+                                                              })
+                    alertController.addAction(cancel)
+                    guard let currentViewController = UIApplication.shared.keyWindow?.topMostViewController() else {
+                        return
+                    }
+                    currentViewController.present(alertController, animated: true, completion: nil)
+                    
+                } else {
+                    self.performStartCallAction(uuid: uuid, handle: to)
+                }
+            }   
+            /// From    
         } else {
             let uuid = UUID()
             
