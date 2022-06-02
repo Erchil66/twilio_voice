@@ -56,8 +56,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         //isSpinning = false
         voipRegistry = PKPushRegistry.init(queue: DispatchQueue.main)
         let configuration = CXProviderConfiguration(localizedName: SwiftTwilioVoicePlugin.appName)
-        configuration.maximumCallGroups = 1
-        configuration.maximumCallsPerCallGroup = 1
+        configuration.maximumCallGroups = 2
+        configuration.maximumCallsPerCallGroup = 3
         if let callKitIcon = UIImage(named: "callkit_icon") {
             configuration.iconTemplateImageData = callKitIcon.pngData()
         }
@@ -270,51 +270,11 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     
     func makeCall(to: String)
     {  
-        if (self.call != nil && self.call?.state == .connected) {
-            // self.userInitiatedDisconnect = true
-            // performEndCallAction(uuid: self.call!.uuid!)    
-            
-            // From  
-             let uuid = UUID()
-                 self.checkRecordPermission { (permissionGranted) in
-                if (!permissionGranted) {
-                    let alertController: UIAlertController = UIAlertController(title: String(format:  NSLocalizedString("mic_permission_title", comment: "") , SwiftTwilioVoicePlugin.appName),
-                                                                               message: NSLocalizedString( "mic_permission_subtitle", comment: ""),
-                                                                               preferredStyle: .alert)
-                    
-                    let continueWithMic: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_continue_no_mic", comment: ""),
-                                                                       style: .default,
-                                                                       handler: { (action) in
-                                                                        self.performStartCallActionX1(uuid: uuid, handle: to)
-                                                                       })
-                    alertController.addAction(continueWithMic)
-                    
-                    let goToSettings: UIAlertAction = UIAlertAction(title:NSLocalizedString("btn_settings", comment: ""),
-                                                                    style: .default,
-                                                                    handler: { (action) in
-                                                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                                                                                  options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: false],
-                                                                                                  completionHandler: nil)
-                                                                    })
-                    alertController.addAction(goToSettings)
-                    
-                    let cancel: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_cancel", comment: ""),
-                                                              style: .cancel,
-                                                              handler: { (action) in
-                                                                //self.toggleUIState(isEnabled: true, showCallControl: false)
-                                                                //self.stopSpin()
-                                                              })
-                    alertController.addAction(cancel)
-                    guard let currentViewController = UIApplication.shared.keyWindow?.topMostViewController() else {
-                        return
-                    }
-                    currentViewController.present(alertController, animated: true, completion: nil)
-                    
-                } else {
-                    self.performStartCallActionX1(uuid: uuid, handle: to)
-                }
-            /// From    
-        } else {
+        // if (self.call != nil && self.call?.state == .connected) {
+        //     self.userInitiatedDisconnect = true
+        //     performEndCallAction(uuid: self.call!.uuid!)    
+      
+        // } else {
             let uuid = UUID()
             
             self.checkRecordPermission { (permissionGranted) in
@@ -355,7 +315,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
                     self.performStartCallAction(uuid: uuid, handle: to)
                 }
             }
-        }
+       // }
     }
     
     func checkRecordPermission(completion: @escaping (_ permissionGranted: Bool) -> Void) {
@@ -817,34 +777,6 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             self.callKitProvider.reportCall(with: uuid, updated: callUpdate)
         }
     }
-   // I add Here
-    func performStartCallActionX1(uuid: UUID, handle: String) {
-        let callHandle = CXHandle(type: .generic, value: handle)
-        let startCallAction = CXStartCallAction(call: uuid, handle: callHandle)
-        let transaction = CXTransaction(action: startCallAction)
-        
-        callKitCallController.request(transaction)  { error in
-            if let error = error {
-                self.sendPhoneCallEvents(description: "LOG|StartCallAction transaction request failed: \(error.localizedDescription)", isError: false)
-                return
-            }
-            
-            self.sendPhoneCallEvents(description: "LOG|StartCallAction transaction request successful", isError: false)
-            
-            let callUpdate = CXCallUpdate()
-            // callUpdate.remoteHandle = callHandle
-           // callUpdate.remoteHandle = nil
-            callUpdate.localizedCallerName = self.clients[handle] ?? self.clients["defaultCaller"] ?? self.defaultCaller
-            callUpdate.supportsDTMF = false
-            callUpdate.supportsHolding = false
-            callUpdate.supportsGrouping = false
-            callUpdate.supportsUngrouping = false
-            callUpdate.hasVideo = false
-            
-            self.callKitProvider.reportCall(with: uuid, updated: callUpdate)
-        }
-    }
-    // I add Here at end
     
     
     func reportIncomingCall(from: String,fromx: String, fromx1: String, uuid: UUID) {
