@@ -164,8 +164,8 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         }else if flutterCall.method == "getParams"{
             
             let haveData:String? = finaleSTL!.trimmingCharacters(in: .whitespaces).isEmpty ? "" : finaleSTL
-            ///
-            result(haveData)
+            /// add some !
+            result(haveData!)
             return;
         }
 
@@ -270,12 +270,51 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
     
     func makeCall(to: String)
     {  
-        // if (self.call != nil && self.call?.state == .connected) {
-        //     // self.userInitiatedDisconnect = true
-        //     // performEndCallAction(uuid: self.call!.uuid!)    
-           
+        if (self.call != nil && self.call?.state == .connected) {
+            // self.userInitiatedDisconnect = true
+            // performEndCallAction(uuid: self.call!.uuid!)    
+           let uuid = UUID()
+            
+            self.checkRecordPermission { (permissionGranted) in
+                if (!permissionGranted) {
+                    let alertController: UIAlertController = UIAlertController(title: String(format:  NSLocalizedString("mic_permission_title", comment: "") , SwiftTwilioVoicePlugin.appName),
+                                                                               message: NSLocalizedString( "mic_permission_subtitle", comment: ""),
+                                                                               preferredStyle: .alert)
+                    
+                    let continueWithMic: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_continue_no_mic", comment: ""),
+                                                                       style: .default,
+                                                                       handler: { (action) in
+                                                                        self.performStartCallAction(uuid: uuid, handle: to)
+                                                                       })
+                    alertController.addAction(continueWithMic)
+                    
+                    let goToSettings: UIAlertAction = UIAlertAction(title:NSLocalizedString("btn_settings", comment: ""),
+                                                                    style: .default,
+                                                                    handler: { (action) in
+                                                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                                                                                  options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: false],
+                                                                                                  completionHandler: nil)
+                                                                    })
+                    alertController.addAction(goToSettings)
+                    
+                    let cancel: UIAlertAction = UIAlertAction(title: NSLocalizedString("btn_cancel", comment: ""),
+                                                              style: .cancel,
+                                                              handler: { (action) in
+                                                                //self.toggleUIState(isEnabled: true, showCallControl: false)
+                                                                //self.stopSpin()
+                                                              })
+                    alertController.addAction(cancel)
+                    guard let currentViewController = UIApplication.shared.keyWindow?.topMostViewController() else {
+                        return
+                    }
+                    currentViewController.present(alertController, animated: true, completion: nil)
+                    
+                } else {
+                    self.performStartCallAction(uuid: uuid, handle: to)
+                }
+            }
       
-        // } else {
+        } else {
             let uuid = UUID()
             
             self.checkRecordPermission { (permissionGranted) in
@@ -316,7 +355,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
                     self.performStartCallAction(uuid: uuid, handle: to)
                 }
             }
-        //}
+        }
     }
     
     func checkRecordPermission(completion: @escaping (_ permissionGranted: Bool) -> Void) {
@@ -486,13 +525,18 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let from:String?  =  callInvite.customParameters!["firstname"] ?? ""
         let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
         var fromx1:String = callInvite.from ?? ""
+        // Add here for only forward names
+        var fromx2:String? = callInvite.customParameters!["forward_call_info"]["name"] ?? ""
+        //////
         fromx1 = fromx1.replacingOccurrences(of: "client:", with: "")
         // Start at here
 
         self.sendPhoneCallEvents(description: "Ringing|\(from)|\(callInvite.to)|Incoming\(formatCustomParams(params: callInvite.customParameters))", isError: false)
         reportIncomingCall(from: from!, fromx: fromx! ,fromx1 : fromx1,uuid: callInvite.uuid)
         self.callInvite = callInvite
-        self.finaleSTL = "\(from) \(fromx)".trimmingCharacters(in: .whitespaces).isEmpty ? fromx1 : "\(from) \(fromx)"
+        ////
+        self.finaleSTL = "\(from) \(fromx)".trimmingCharacters(in: .whitespaces).isEmpty ? "\(fromx1)" :"\(from) \(fromx)"
+        ////
     }   
     
     func formatCustomParams(params: [String:Any]?)->String{
