@@ -526,7 +526,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         let fromx:String? = callInvite.customParameters!["lastname"] ?? ""
         var fromx1:String = callInvite.from ?? ""
         // Add here for only forward names
-        var fromx2:String? = callInvite.customParameters!["forward_call_info"]["name"] ?? ""
+        //var fromx2:String? = callInvite.customParameters!["forward_call_info"]["name"] ?? ""
         //////
         fromx1 = fromx1.replacingOccurrences(of: "client:", with: "")
         // Start at here
