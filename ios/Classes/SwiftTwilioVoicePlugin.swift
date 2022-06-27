@@ -202,20 +202,32 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         }
         else if flutterCall.method == "unregister" {
             guard let deviceToken = deviceToken else {
+             result(false);
                 return
             }
             if let token = arguments["accessToken"] as? String{
                 self.unregisterTokens(token: token, deviceToken: deviceToken)
+                result(true);
             }else if let token = accessToken{
                 self.unregisterTokens(token: token, deviceToken: deviceToken)
+                result(false);
             }
             
         }else if flutterCall.method == "hangUp"{
-            if (self.call != nil && self.call?.state == .connected) {
+            // if (self.call != nil && self.call?.state == .connected) {
+            //     self.sendPhoneCallEvents(description: "LOG|hangUp method invoked", isError: false)
+            //     self.userInitiatedDisconnect = true
+            //     performEndCallAction(uuid: self.call!.uuid!)
+            //     //self.toggleUIState(isEnabled: false, showCallControl: false)
+            // }
+             if (self.call != nil) {
+                print("Calling HangUp")
                 self.sendPhoneCallEvents(description: "LOG|hangUp method invoked", isError: false)
                 self.userInitiatedDisconnect = true
                 performEndCallAction(uuid: self.call!.uuid!)
                 //self.toggleUIState(isEnabled: false, showCallControl: false)
+            } else {
+                print("Attempted to end call, but call is nil")
             }
         }else if flutterCall.method == "registerClient"{
             guard let clientId = arguments["id"] as? String, let clientName =  arguments["name"] as? String else {return}
@@ -349,7 +361,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
             return
         }
         
-        guard registrationRequired() || deviceToken != credentials.token else { return }
+        // guard registrationRequired() || deviceToken != credentials.token else { return }
 
         let deviceToken = credentials.token
         
@@ -419,7 +431,7 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
                 self.sendPhoneCallEvents(description: "LOG|Successfully unregistered from VoIP push notifications.", isError: false)
             }
         }
-        UserDefaults.standard.removeObject(forKey: kCachedDeviceToken)
+        // UserDefaults.standard.removeObject(forKey: kCachedDeviceToken)
         
         // Remove the cached binding as credentials are invalidated
         UserDefaults.standard.removeObject(forKey: kCachedBindingDate)
