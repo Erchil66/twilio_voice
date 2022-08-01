@@ -3,6 +3,11 @@
     <color name="primary">#279DE1</color>
     <color name="accent">#1b6e9e</color>
 
+    <color name="back_white">#F0FAFA</color>
+    <color name="text_color">#1E2332</color>
+    <color name="red_holo">#FF374B</color>
+    <color name="green">#05C35F</color>
+
     <color name="white">#FFFFFF</color>
     <color name="white_55">#55FFFFFF</color>
     <color name="black">#000000</color>

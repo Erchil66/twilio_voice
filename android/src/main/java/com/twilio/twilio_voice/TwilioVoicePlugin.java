@@ -87,6 +87,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
     private boolean backgroundCallUI = false;
 
     private SharedPreferences pSharedPref;
+    public String get_name_params;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -144,24 +145,24 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                     handleReject();
                     break;
                 case Constants.ACTION_ACCEPT:
-                        int acceptOrigin = intent.getIntExtra(Constants.ACCEPT_CALL_ORIGIN,0);
-                        if(acceptOrigin == 0){
-                             Intent answerIntent = new Intent(activity, AnswerJavaActivity.class);
-                            answerIntent.setAction(Constants.ACTION_ACCEPT);
-                            answerIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, activeCallNotificationId);
-                            answerIntent.putExtra(Constants.INCOMING_CALL_INVITE, activeCallInvite);
-                            answerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            answerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            activity.startActivity(answerIntent);
-                        }else{
-                            answer();
-                        }
+                    int acceptOrigin = intent.getIntExtra(Constants.ACCEPT_CALL_ORIGIN,0);
+                    if(acceptOrigin == 0){
+                        Intent answerIntent = new Intent(activity, AnswerJavaActivity.class);
+                        answerIntent.setAction(Constants.ACTION_ACCEPT);
+                        answerIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, activeCallNotificationId);
+                        answerIntent.putExtra(Constants.INCOMING_CALL_INVITE, activeCallInvite);
+                        answerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        answerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        activity.startActivity(answerIntent);
+                    }else{
+                        answer();
+                    }
 
                     break;
                 case Constants.ACTION_TOGGLE_MUTE:
                     if (activeCall != null) {
-                      boolean muted = activeCall.isMuted();
-                      mute(!muted);
+                        boolean muted = activeCall.isMuted();
+                        mute(!muted);
                     }
                     break;
                 case Constants.ACTION_END_CALL:
@@ -340,13 +341,20 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
         }
     }
 
-    private void unregisterForCallInvites(String accessToken) {
-        if(this.fcmToken == null){return;}
+    private boolean unregisterForCallInvites(String accessToken) {
+        if(this.fcmToken == null){
+            return false;
+        }
         Log.i(TAG, "Un-registering with FCM");
         if (accessToken != null) {
             Voice.unregister(accessToken, Voice.RegistrationChannel.FCM, this.fcmToken, unregistrationListener);
+            return true;
         }else if (this.accessToken != null) {
             Voice.unregister(this.accessToken, Voice.RegistrationChannel.FCM, this.fcmToken, unregistrationListener);
+            return true;
+        } else {
+            Log.d(TAG, "unregisterForCallInvites: did not unregister accessToken");
+            return false;
         }
     }
 
@@ -401,7 +409,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
 
             result.success(true);
         } else if (call.method.equals("toggleMute")) {
-          boolean muted = call.argument("muted");
+            boolean muted = call.argument("muted");
             Log.d(TAG, "Muting call");
             this.mute(muted);
             result.success(true);
@@ -420,8 +428,8 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
             result.success(true);
         } else if (call.method.equals("unregister")) {
             String accessToken = call.argument("accessToken");
-            this.unregisterForCallInvites(accessToken);
-            result.success(true);
+            boolean res = this.unregisterForCallInvites(accessToken);
+            result.success(res);
         } else if (call.method.equals("makeCall")) {
             Log.d(TAG, "Making new call");
             sendPhoneCallEvents("LOG|Making new call");
@@ -445,7 +453,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
             String id = call.argument("id");
             String name = call.argument("name");
             boolean added = false;
-            if (id != null && name != null && !pSharedPref.contains(id)) {
+            if (id != null && name != null) {
                 sendPhoneCallEvents("LOG|Registering client " + id + ":" + name);
                 SharedPreferences.Editor edit = pSharedPref.edit();
                 edit.putString(id, name);
@@ -503,6 +511,16 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                 edit.putBoolean("show-notifications", show);
                 edit.apply();
             }
+            // TODO
+        } else if (call.method.equals("show-return-call-option")) {
+            boolean show = call.argument("show");
+            boolean prefsShow = pSharedPref.getBoolean("show-return-call-option", true);
+            if(show != prefsShow){
+                SharedPreferences.Editor edit = pSharedPref.edit();
+                edit.putBoolean("show-return-call-option", show);
+                edit.apply();
+            }
+            result.success(true);
         } else if (call.method.equals("requiresBackgroundPermissions")) {
             String manufacturer = "xiaomi";
             if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {

@@ -41,7 +41,7 @@ import com.twilio.twilio_voice.Constants;
 import com.twilio.twilio_voice.IncomingCallNotificationService;
 
 public class VoiceFirebaseMessagingService extends FirebaseMessagingService {
-    
+
     public static final String ACTION_TOKEN = "io.flutter.plugins.firebase.messaging.TOKEN";
     public static final String EXTRA_TOKEN = "token";
 
@@ -82,11 +82,11 @@ public class VoiceFirebaseMessagingService extends FirebaseMessagingService {
 
             if (!valid) {
                 Log.e(TAG, "The message was not a valid Twilio Voice SDK payload: " +
-                 remoteMessage.getData());
-                 notificationReceived(remoteMessage);
+                        remoteMessage.getData());
+                notificationReceived(remoteMessage);
             }
         }
-        
+
     }
     // Override if you also receive notifications from other plugins
     public void notificationReceived(final RemoteMessage remoteMessage){ }
@@ -108,6 +108,3 @@ public class VoiceFirebaseMessagingService extends FirebaseMessagingService {
         startService(intent);
     }
 }
-
-
-

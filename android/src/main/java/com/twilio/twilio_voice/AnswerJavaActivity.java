@@ -16,6 +16,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ import com.twilio.voice.CallInvite;
 public class AnswerJavaActivity extends AppCompatActivity {
 
     private static String TAG = "AnswerActivity";
-    public static final String TwilioPreferences = "mx.TwilioPreferences";
+    public static final String TwilioPreferences = "com.twilio.twilio_voicePreferences";
 
     private NotificationManager notificationManager;
     private boolean isReceiverRegistered = false;
@@ -48,8 +49,8 @@ public class AnswerJavaActivity extends AppCompatActivity {
     private PowerManager.WakeLock wakeLock;
     private TextView tvUserName;
     private TextView tvCallStatus;
-    private ImageView btnAnswer;
-    private ImageView btnReject;
+    private LinearLayout btnAnswer;
+    private LinearLayout btnReject;
     Call.Listener callListener = callListener();
 
     @Override
@@ -59,8 +60,8 @@ public class AnswerJavaActivity extends AppCompatActivity {
 
         tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvCallStatus = (TextView) findViewById(R.id.tvCallStatus);
-        btnAnswer = (ImageView) findViewById(R.id.btnAnswer);
-        btnReject = (ImageView) findViewById(R.id.btnReject);
+        btnAnswer = (LinearLayout) findViewById(R.id.btnAnswer);
+        btnReject = (LinearLayout) findViewById(R.id.btnReject);
 
         KeyguardManager kgm = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         boolean isKeyguardUp = kgm.inKeyguardRestrictedInputMode();
@@ -149,11 +150,19 @@ public class AnswerJavaActivity extends AppCompatActivity {
     private void configCallUI() {
         Log.d(TAG, "configCallUI");
         if (activeCallInvite != null) {
+            String fromName = activeCallInvite.getCustomParameters().get("caller_name");
+            String firstname = activeCallInvite.getCustomParameters().get("firstname");
+            String lastname = activeCallInvite.getCustomParameters().get("lastname");
+            String phoneNum = activeCallInvite.getFrom();
+            Log.d("Firstname",firstname);
+            Log.d("Lastname",lastname);
+            Log.d("PhoneNumberClient",phoneNum);
+            String allNameUsed = firstname.isEmpty() || lastname.isEmpty() ? phoneNum : firstname + " "+ lastname;
+            if(fromName == null) {
+                fromName = getString(R.string.unknown_caller);
+            }
 
-            String fromId = activeCallInvite.getFrom().replace("client:", "");
-            SharedPreferences preferences = getApplicationContext().getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
-            String caller = preferences.getString(fromId, preferences.getString("defaultCaller", getString(R.string.unknown_caller)));
-            tvUserName.setText(caller);
+            tvUserName.setText(allNameUsed);
 
             btnAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -197,10 +206,8 @@ public class AnswerJavaActivity extends AppCompatActivity {
             finish();
         } else {
             Log.d(TAG, "Answering call");
-
             activeCallInvite.accept(this, callListener);
             notificationManager.cancel(activeCallNotificationId);
-
         }
     }
 
@@ -208,6 +215,8 @@ public class AnswerJavaActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BackgroundCallJavaActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        /////
+
         intent.putExtra(Constants.CALL_FROM, call.getFrom());
         startActivity(intent);
         Log.d(TAG, "Connected");
@@ -369,6 +378,7 @@ public class AnswerJavaActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MIC_PERMISSION_REQUEST_CODE) {
             if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Microphone permissions needed. Please allow in your application settings.", Toast.LENGTH_LONG).show();
