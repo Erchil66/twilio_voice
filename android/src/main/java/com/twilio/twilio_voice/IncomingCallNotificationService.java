@@ -85,8 +85,8 @@ public class IncomingCallNotificationService extends Service {
         Context context = getApplicationContext();
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         Log.i(TAG, "Setting notification from, " + callInvite.getFrom());
-        String firstname = callInvite.getCustomParameters().get('firstname');
-        String lastname = callInvite.getCustomParameters().get('lastname');
+        String firstname = callInvite.getCustomParameters().get("firstname");
+        String lastname = callInvite.getCustomParameters().get("lastname");
         String phone = callInvite.getFrom();
         String caller = firtname == null && lastname == null ? phone : firstname+" "+lastname;
         // String caller = callInvite.getCustomParameters().get("caller_name");
