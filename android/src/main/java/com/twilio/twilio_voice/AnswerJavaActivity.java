@@ -150,17 +150,18 @@ public class AnswerJavaActivity extends AppCompatActivity {
     private void configCallUI() {
         Log.d(TAG, "configCallUI");
         if (activeCallInvite != null) {
-            String fromName = activeCallInvite.getCustomParameters().get("caller_name");
+           // String fromName = activeCallInvite.getCustomParameters().get("caller_name");
             String firstname = activeCallInvite.getCustomParameters().get("firstname");
             String lastname = activeCallInvite.getCustomParameters().get("lastname");
             String phoneNum = activeCallInvite.getFrom();
-            Log.d("Firstname",firstname);
-            Log.d("Lastname",lastname);
-            Log.d("PhoneNumberClient",phoneNum);
-            String allNameUsed = firstname.isEmpty() || lastname.isEmpty() ? phoneNum : firstname + " "+ lastname;
-            if(fromName == null) {
-                fromName = getString(R.string.unknown_caller);
-            }
+            Log.d(TAG,firstname.toString());
+            Log.d(TAG,lastname.toString());
+            Log.d(TAG,phoneNum.toString());
+            
+            String allNameUsed = firstname == null || lastname ==null ? phoneNum : firstname +" "+ lastname;
+           if(allNameUsed == null) {
+            allNameUsed = getString(R.string.unknown_caller);
+           }
 
             tvUserName.setText(allNameUsed);
 
