@@ -88,7 +88,7 @@ public class IncomingCallNotificationService extends Service {
         String firstname = callInvite.getCustomParameters().get("firstname");
         String lastname = callInvite.getCustomParameters().get("lastname");
         String phone = callInvite.getFrom();
-        String caller = firtname == null && lastname == null ? phone : firstname+" "+lastname;
+        String caller = firstname == null && lastname == null ? phone : firstname+" "+lastname;
         // String caller = callInvite.getCustomParameters().get("caller_name");
         // if(caller == null) {
         //     caller = getString(R.string.unknown_caller);
