@@ -244,7 +244,11 @@ public class IncomingCallNotificationService extends Service {
         boolean prefsShow = preferences.getBoolean("show-notifications", true);
         boolean allowReturnCalls = preferences.getBoolean("show-return-call-option", true);
         if (prefsShow && allowReturnCalls) {
-            buildMissedCallNotification(cancelledCallInvite.getFrom(), cancelledCallInvite.getTo(), allowReturnCalls);
+            String firstname = cancelledCallInvite.getCustomParameters().get("firstname");
+            String lastname = cancelledCallInvite.getCustomParameters().get("lastname");
+            String phone = cancelledCallInvite.getFrom();
+            String callerMe = firstname == null  && lastname == null ? phone : firstname+" "+lastname;
+            buildMissedCallNotification(callerMe, cancelledCallInvite.getTo(), allowReturnCalls);
         }
         endForeground();
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
