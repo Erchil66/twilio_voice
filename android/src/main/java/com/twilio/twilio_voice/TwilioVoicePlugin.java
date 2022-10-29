@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -260,13 +261,13 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
     private RegistrationListener registrationListener() {
         return new RegistrationListener() {
             @Override
-            public void onRegistered(String accessToken, String fcmToken) {
+            public void onRegistered(@NonNull String accessToken, @NonNull String fcmToken) {
                 Log.d(TAG, "Successfully registered FCM " + fcmToken);
             }
 
             @Override
-            public void onError(RegistrationException error, String accessToken, String fcmToken) {
-                String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
+            public void onError(@NonNull RegistrationException error, @NonNull String accessToken, @NonNull String fcmToken) {
+                @SuppressLint("DefaultLocale") String message = String.format("Registration Error: %d, %s", error.getErrorCode(), error.getMessage());
                 Log.e(TAG, message);
             }
         };
@@ -281,7 +282,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
 
             @Override
             public void onError(RegistrationException error, String accessToken, String fcmToken) {
-                String message = String.format("Unregistration Error: %d, %s", error.getErrorCode(), error.getMessage());
+                @SuppressLint("DefaultLocale") String message = String.format("Un-registration Error: %d, %s", error.getErrorCode(), error.getMessage());
                 Log.e(TAG, message);
             }
         };
@@ -360,7 +361,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        Log.d(TAG, "Detatched from Flutter engine");
+        Log.d(TAG, "Detached from Flutter engine");
         SoundPoolManager.getInstance(context).release();
         context = null;
         methodChannel.setMethodCallHandler(null);
@@ -533,8 +534,8 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
             if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
 
                 Intent localIntent = new Intent("miui.intent.action.APP_PERM_EDITOR");
-                localIntent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
-                localIntent.putExtra("extra_pkgname", activity.getPackageName());
+                localIntent.setClassName("com.miui.security-center", "com.miui.perm center.permissions.PermissionsEditorActivity");
+                localIntent.putExtra("extra_pkg-name", activity.getPackageName());
                 activity.startActivity(localIntent);
             }
             result.success(true);
@@ -615,16 +616,16 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
              * raised, irrespective of the value of answerOnBridge being set to true or false
              */
             @Override
-            public void onRinging(Call call) {
+            public void onRinging(@NonNull Call call) {
                 Log.d(TAG, "onRinging");
                 sendPhoneCallEvents("Ringing|" + call.getFrom() + "|" + call.getTo() + "|" + (callOutgoing ? "Outgoing" : "Incoming"));
             }
 
             @Override
-            public void onConnectFailure(Call call, CallException error) {
+            public void onConnectFailure(@NonNull Call call, @NonNull CallException error) {
                 // setAudioFocus(false);
                 Log.d(TAG, "Connect failure");
-                String message = String.format("Call Error: %d, %s", error.getErrorCode(), error.getMessage());
+                @SuppressLint("DefaultLocale") String message = String.format("Call Error: %d, %s", error.getErrorCode(), error.getMessage());
                 Log.e(TAG, message);
                 sendPhoneCallEvents("LOG|" + message);
 
@@ -659,7 +660,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                 // setAudioFocus(false);
                 Log.d(TAG, "Disconnected");
                 if (error != null) {
-                    String message = String.format("Call Error: %d, %s", error.getErrorCode(), error.getMessage());
+                    @SuppressLint("DefaultLocale") String message = String.format("Call Error: %d, %s", error.getErrorCode(), error.getMessage());
                     Log.e(TAG, message);
                 }
                 activity.setVolumeControlStream(savedVolumeControlStream);
@@ -701,17 +702,18 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
         if (activeCall != null) {
             boolean hold = activeCall.isOnHold();
             activeCall.hold(!hold);
-            sendPhoneCallEvents(hold ? "Unhold" : "Hold");
+            sendPhoneCallEvents(hold ? "Un-hold" : "Hold");
         }
     }
 
     private void mute(boolean muted) {
         if (activeCall != null) {
             activeCall.mute(muted);
-            sendPhoneCallEvents(muted ? "Mute" : "Unmute");
+            sendPhoneCallEvents(muted ? "Mute" : "Un-mute");
         }
     }
 
+    @SuppressLint("WrongConstant")
     private void setAudioFocus(boolean setFocus) {
         if (audioManager != null) {
             if (setFocus) {
@@ -733,7 +735,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                             .build();
                     audioManager.requestAudioFocus(focusRequest);
                 } else {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
                         int focusRequestResult = audioManager.requestAudioFocus(
                                 new AudioManager.OnAudioFocusChangeListener() {
 
@@ -743,7 +745,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                                 }, AudioManager.STREAM_VOICE_CALL,
                                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
                     }
-                }
+                //}
                 /*
                  * Start by setting MODE_IN_COMMUNICATION as default audio mode. It is
                  * required to be in this mode when playout and/or recording starts for

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.twilio.twilio_voice">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -15,17 +16,19 @@
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:theme="@style/Theme.AppCompat"
-            android:turnScreenOn="true" />
+            android:turnScreenOn="true"
+            tools:targetApi="o_mr1" />
         <activity
             android:name=".BackgroundCallJavaActivity"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:theme="@style/Theme.AppCompat"
-            android:turnScreenOn="true" />
+            android:turnScreenOn="true"
+            tools:targetApi="o_mr1" />
 
         <service
             android:name=".IncomingCallNotificationService"
-            android:exported="true"
+            android:exported="false"
             android:enabled="true">
             <intent-filter>
                 <action android:name="ACTION_ACCEPT" />
