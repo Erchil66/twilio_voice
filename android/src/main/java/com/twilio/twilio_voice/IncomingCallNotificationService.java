@@ -1,5 +1,6 @@
 package com.twilio.twilio_voice;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -74,7 +75,7 @@ public class IncomingCallNotificationService extends Service {
         intent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
         intent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         /*
          * Pass the notification id and call sid to use as an identifier to cancel the
          * notification later
@@ -83,16 +84,16 @@ public class IncomingCallNotificationService extends Service {
         extras.putString(Constants.CALL_SID_KEY, callInvite.getCallSid());
 
         Context context = getApplicationContext();
-        SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
+        //SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         Log.i(TAG, "Setting notification from, " + callInvite.getFrom());
         String firstname = callInvite.getCustomParameters().get("firstname");
         String lastname = callInvite.getCustomParameters().get("lastname");
         String phone = callInvite.getFrom();
         String caller = firstname == null && lastname == null ? phone : firstname+" "+lastname;
-        // String caller = callInvite.getCustomParameters().get("caller_name");
+        /* String caller = callInvite.getCustomParameters().get("caller_name");
         // if(caller == null) {
         //     caller = getString(R.string.unknown_caller);
-        // }
+         }*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "building notification for new phones");
@@ -105,7 +106,7 @@ public class IncomingCallNotificationService extends Service {
         } else {
             Log.i(TAG, "building notification for older phones");
 
-            return new NotificationCompat.Builder(this)
+            return new NotificationCompat.Builder(this,createChannel(channelImportance))
                     .setSmallIcon(R.drawable.ic_call_end_white_24dp)
                     .setContentTitle(getApplicationName(context))
                     .setContentText(getString(R.string.new_call, caller))
@@ -146,14 +147,14 @@ public class IncomingCallNotificationService extends Service {
         rejectIntent.setAction(Constants.ACTION_REJECT);
         rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
         rejectIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-        PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent acceptIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
         acceptIntent.setAction(Constants.ACTION_ACCEPT);
         acceptIntent.putExtra(Constants.ACCEPT_CALL_ORIGIN, 0);
         acceptIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
         acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-        PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long[] mVibratePattern = new long[]{0, 400, 400, 400, 400, 400, 400, 400};
         Notification.Builder builder =
@@ -248,7 +249,8 @@ public class IncomingCallNotificationService extends Service {
             String lastname = cancelledCallInvite.getCustomParameters().get("lastname");
             String phone = cancelledCallInvite.getFrom();
             String callerMe = firstname == null  && lastname == null ? phone : firstname+" "+lastname;
-            buildMissedCallNotification(callerMe, cancelledCallInvite.getTo(), allowReturnCalls);
+            assert callerMe != null;
+            buildMissedCallNotification(callerMe, cancelledCallInvite.getTo());
         }
         endForeground();
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -263,7 +265,7 @@ public class IncomingCallNotificationService extends Service {
     }
 
 
-    private void buildMissedCallNotification(String callerId, String to, boolean showReturnCallOption) {
+    private void buildMissedCallNotification(String callerId, String to) {
 
         String fromId = callerId.replace("client:", "");
         Context context = getApplicationContext();
@@ -276,7 +278,7 @@ public class IncomingCallNotificationService extends Service {
         returnCallIntent.setAction(Constants.ACTION_RETURN_CALL);
         returnCallIntent.putExtra(Constants.CALL_TO, to);
         returnCallIntent.putExtra(Constants.CALL_FROM, callerId);
-        PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         Notification notification;
@@ -298,7 +300,7 @@ public class IncomingCallNotificationService extends Service {
 
             notification = builder.build();
         } else {
-            notification = new NotificationCompat.Builder(this)
+            notification = new NotificationCompat.Builder(this,"")
                     .setSmallIcon(R.drawable.ic_call_end_white_24dp)
                     .setContentTitle(getApplicationName(context))
                     .setContentText(title)
