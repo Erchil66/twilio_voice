@@ -96,7 +96,7 @@ public class IncomingCallNotificationService extends Service {
         //     caller = getString(R.string.unknown_caller);
          }*/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "building notification for new phones");
             return buildNotification(getApplicationName(context), getString(R.string.new_call, caller),
                     pendingIntent,
@@ -145,39 +145,7 @@ public class IncomingCallNotificationService extends Service {
                                            String channelId) {
         Log.d(TAG, "Building notification");
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            Intent rejectIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
-            rejectIntent.setAction(Constants.ACTION_REJECT);
-            rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
-            rejectIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent acceptIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
-            acceptIntent.setAction(Constants.ACTION_ACCEPT);
-            acceptIntent.putExtra(Constants.ACCEPT_CALL_ORIGIN, 0);
-            acceptIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
-            acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-            long[] mVibratePattern = new long[]{0, 400, 400, 400, 400, 400, 400, 400};
-            Notification.Builder builder =
-                    new Notification.Builder(getApplicationContext(), channelId)
-                            .setSmallIcon(R.drawable.ic_call_end_white_24dp)
-                            .setContentTitle(title)
-                            .setContentText(text)
-                            .setCategory(Notification.CATEGORY_CALL)
-                            .setFullScreenIntent(pendingIntent, true)
-                            .setExtras(extras)
-                            .setVibrate(mVibratePattern)
-                            .setAutoCancel(true)
-                            .setVisibility(Notification.VISIBILITY_PUBLIC)
-                           .addAction(android.R.drawable.ic_menu_delete, getString(R.string.decline), piRejectIntent)
-                           .addAction(android.R.drawable.ic_menu_call, getString(R.string.answer), piAcceptIntent)
-                            .setFullScreenIntent(pendingIntent, true);
-
-            return builder.build();
-
-        }else{
             Intent rejectIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
             rejectIntent.setAction(Constants.ACTION_REJECT);
             rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
@@ -208,7 +176,7 @@ public class IncomingCallNotificationService extends Service {
                             .setFullScreenIntent(pendingIntent, true);
 
             return builder.build();
-        }
+
 
 
 
@@ -326,7 +294,7 @@ public class IncomingCallNotificationService extends Service {
 
 
         Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this, createChannel(NotificationManager.IMPORTANCE_HIGH))
