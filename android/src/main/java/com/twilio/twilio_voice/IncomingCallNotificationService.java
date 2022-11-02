@@ -150,14 +150,14 @@ public class IncomingCallNotificationService extends Service {
             rejectIntent.setAction(Constants.ACTION_REJECT);
             rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
             rejectIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent acceptIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
             acceptIntent.setAction(Constants.ACTION_ACCEPT);
             acceptIntent.putExtra(Constants.ACCEPT_CALL_ORIGIN, 0);
             acceptIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
             acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             long[] mVibratePattern = new long[]{0, 400, 400, 400, 400, 400, 400, 400};
             Notification.Builder builder =
@@ -182,14 +182,14 @@ public class IncomingCallNotificationService extends Service {
             rejectIntent.setAction(Constants.ACTION_REJECT);
             rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
             rejectIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent acceptIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
             acceptIntent.setAction(Constants.ACTION_ACCEPT);
             acceptIntent.putExtra(Constants.ACCEPT_CALL_ORIGIN, 0);
             acceptIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
             acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-            PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent piAcceptIntent = PendingIntent.getService(getApplicationContext(), 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             long[] mVibratePattern = new long[]{0, 400, 400, 400, 400, 400, 400, 400};
             Notification.Builder builder =
@@ -322,7 +322,7 @@ public class IncomingCallNotificationService extends Service {
         returnCallIntent.setAction(Constants.ACTION_RETURN_CALL);
         returnCallIntent.putExtra(Constants.CALL_TO, to);
         returnCallIntent.putExtra(Constants.CALL_FROM, callerId);
-        PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         Notification notification;
