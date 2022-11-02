@@ -1,6 +1,5 @@
 package com.twilio.twilio_voice;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -69,6 +68,7 @@ public class IncomingCallNotificationService extends Service {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private Notification createNotification(CallInvite callInvite, int notificationId, int channelImportance) {
         Log.i(TAG, "createNotification");
         Intent intent = new Intent(this, AnswerJavaActivity.class);
@@ -76,10 +76,10 @@ public class IncomingCallNotificationService extends Service {
         intent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
         intent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         /*
          * Pass the notification id and call sid to use as an identifier to cancel the
-         * notification later
+         * notification late
          */
         Bundle extras = new Bundle();
         extras.putString(Constants.CALL_SID_KEY, callInvite.getCallSid());
@@ -168,11 +168,11 @@ public class IncomingCallNotificationService extends Service {
                             .setCategory(Notification.CATEGORY_CALL)
                             .setFullScreenIntent(pendingIntent, true)
                             .setExtras(extras)
-                            //.setVibrate(mVibratePattern)
+                            .setVibrate(mVibratePattern)
                             .setAutoCancel(true)
                             .setVisibility(Notification.VISIBILITY_PUBLIC)
-//                            .addAction(android.R.drawable.ic_menu_delete, getString(R.string.decline), piRejectIntent)
-//                            .addAction(android.R.drawable.ic_menu_call, getString(R.string.answer), piAcceptIntent)
+                           .addAction(android.R.drawable.ic_menu_delete, getString(R.string.decline), piRejectIntent)
+                           .addAction(android.R.drawable.ic_menu_call, getString(R.string.answer), piAcceptIntent)
                             .setFullScreenIntent(pendingIntent, true);
 
             return builder.build();

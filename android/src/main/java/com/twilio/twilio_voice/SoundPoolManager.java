@@ -80,9 +80,9 @@ public class SoundPoolManager {
     }
     private void vibrate(){
         long[] mVibratePattern = new long[]{0, 400, 400, 400, 400, 400, 400, 400};
-        final int[] mAmplitudes = new int[]{0, 128, 0, 128, 0, 128, 0, 128};
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createWaveform(mVibratePattern, mAmplitudes, 0));
+        //final int[] mAmplitudes = new int[]{0, 128, 0, 128, 0, 128, 0, 128};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            vibrator.vibrate(VibrationEffect.createWaveform(mVibratePattern, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             //deprecated in API 26
             vibrator.vibrate(mVibratePattern, 0);
