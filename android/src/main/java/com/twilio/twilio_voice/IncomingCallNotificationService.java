@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.Lifecycle;
@@ -95,7 +96,7 @@ public class IncomingCallNotificationService extends Service {
         //     caller = getString(R.string.unknown_caller);
          }*/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Log.i(TAG, "building notification for new phones");
             return buildNotification(getApplicationName(context), getString(R.string.new_call, caller),
                     pendingIntent,
@@ -167,11 +168,11 @@ public class IncomingCallNotificationService extends Service {
                             .setCategory(Notification.CATEGORY_CALL)
                             .setFullScreenIntent(pendingIntent, true)
                             .setExtras(extras)
-                            .setVibrate(mVibratePattern)
+                            //.setVibrate(mVibratePattern)
                             .setAutoCancel(true)
                             .setVisibility(Notification.VISIBILITY_PUBLIC)
-                            .addAction(android.R.drawable.ic_menu_delete, getString(R.string.decline), piRejectIntent)
-                            .addAction(android.R.drawable.ic_menu_call, getString(R.string.answer), piAcceptIntent)
+//                            .addAction(android.R.drawable.ic_menu_delete, getString(R.string.decline), piRejectIntent)
+//                            .addAction(android.R.drawable.ic_menu_call, getString(R.string.answer), piAcceptIntent)
                             .setFullScreenIntent(pendingIntent, true);
 
             return builder.build();
@@ -290,7 +291,9 @@ public class IncomingCallNotificationService extends Service {
             String phone = cancelledCallInvite.getFrom();
             String callerMe = firstname == null  && lastname == null ? phone : firstname+" "+lastname;
             assert callerMe != null;
-            buildMissedCallNotification(callerMe, cancelledCallInvite.getTo());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                buildMissedCallNotification(callerMe, cancelledCallInvite.getTo());
+            }
         }
         endForeground();
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -305,6 +308,7 @@ public class IncomingCallNotificationService extends Service {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void buildMissedCallNotification(String callerId, String to) {
 
         String fromId = callerId.replace("client:", "");
@@ -318,11 +322,11 @@ public class IncomingCallNotificationService extends Service {
         returnCallIntent.setAction(Constants.ACTION_RETURN_CALL);
         returnCallIntent.putExtra(Constants.CALL_TO, to);
         returnCallIntent.putExtra(Constants.CALL_FROM, callerId);
-        PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent piReturnCallIntent = PendingIntent.getService(getApplicationContext(), 0, returnCallIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
         Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this, createChannel(NotificationManager.IMPORTANCE_HIGH))
