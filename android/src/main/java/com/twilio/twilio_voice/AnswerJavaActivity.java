@@ -8,8 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.SharedPreferences;
-import android.nfc.Tag;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -19,7 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ImageView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,8 +36,8 @@ import java.util.Objects;
 
 public class AnswerJavaActivity extends AppCompatActivity {
 
-    private static String TAG = "AnswerActivity";
-    public static final String TwilioPreferences = "com.twilio.twilio_voicePreferences";
+    private static  String TAG = "AnswerActivity";
+//    public static final String TwilioPreferences = "com.twilio.twilio_voicePreferences";
 
     private NotificationManager notificationManager;
     private boolean isReceiverRegistered = false;
@@ -85,7 +84,7 @@ public class AnswerJavaActivity extends AppCompatActivity {
                 kgm.requestDismissKeyguard(this, null);
             } else {
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
+                wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,TAG);
                 wakeLock.acquire(60 * 1000L /*10 minutes*/);
 
                 getWindow().addFlags(
@@ -142,12 +141,8 @@ public class AnswerJavaActivity extends AppCompatActivity {
         Log.d(TAG, "onNewIntent-");
         if (intent != null && intent.getAction() != null) {
             Log.d(TAG, intent.getAction());
-            switch (intent.getAction()) {
-                case Constants.ACTION_CANCEL_CALL:
-                    newCancelCallClickListener();
-                    break;
-                default: {
-                }
+            if (Constants.ACTION_CANCEL_CALL.equals(intent.getAction())) {
+                newCancelCallClickListener();
             }
         }
     }
@@ -160,9 +155,9 @@ public class AnswerJavaActivity extends AppCompatActivity {
             String firstname = activeCallInvite.getCustomParameters().get("firstname");
             String lastname = activeCallInvite.getCustomParameters().get("lastname");
             String phoneNum = activeCallInvite.getFrom();
-            Log.d(TAG,firstname.toString());
-            Log.d(TAG,lastname.toString());
-            Log.d(TAG,phoneNum.toString());
+            Log.d(TAG, firstname);
+            Log.d(TAG, lastname);
+            Log.d(TAG, phoneNum);
             
             String allNameUsed = firstname == null || lastname ==null ? phoneNum : firstname +" "+ lastname;
 //            if(fromName == null) {
@@ -171,20 +166,12 @@ public class AnswerJavaActivity extends AppCompatActivity {
 
             tvUserName.setText(allNameUsed);
 
-            btnAnswer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onCLick");
-                    checkPermissionsAndAccept();
-                }
+            btnAnswer.setOnClickListener(v -> {
+                Log.d(TAG, "onCLick");
+                checkPermissionsAndAccept();
             });
 
-            btnReject.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rejectCallClickListener();
-                }
-            });
+            btnReject.setOnClickListener(v -> rejectCallClickListener());
         }
     }
 

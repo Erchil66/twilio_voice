@@ -69,7 +69,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
         btnHangUp = (LinearLayout) findViewById(R.id.btnHangUp);
 
         KeyguardManager kgm = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        Boolean isKeyguardUp = kgm.inKeyguardRestrictedInputMode();
+        boolean isKeyguardUp = kgm.inKeyguardRestrictedInputMode();
 
         Log.d(TAG, "isKeyguardUp $isKeyguardUp");
         if (isKeyguardUp) {
@@ -80,8 +80,8 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
                 kgm.requestDismissKeyguard(this, null);
 
             } else {
-                wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
-                wakeLock.acquire();
+                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+                wakeLock.acquire(10*60*1000L /*10 minutes*/);
 
                 getWindow().addFlags(
                         WindowManager.LayoutParams.FLAG_FULLSCREEN |
@@ -122,6 +122,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
     }
 
 //    @SuppressLint("InvalidWakeLockTag")
+    @SuppressLint("InvalidWakeLockTag")
     private void activateSensor() {
 //        if (wakeLock == null) {
 //            Log.d(TAG, "New wakeLog");
@@ -135,7 +136,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
         }
         if (!wakeLock.isHeld()) {
             Log.d(TAG, "wakeLog acquire");
-            wakeLock.acquire();
+            wakeLock.acquire(10*60*1000L /*10 minutes*/);
         }
     }
 
@@ -152,12 +153,8 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
         if (intent != null && intent.getAction() != null) {
             Log.d(TAG, "onNewIntent-");
             Log.d(TAG, intent.getAction());
-            switch (intent.getAction()) {
-                case Constants.ACTION_CANCEL_CALL:
-                    callCanceled();
-                    break;
-                default: {
-                }
+            if (Constants.ACTION_CANCEL_CALL.equals(intent.getAction())) {
+                callCanceled();
             }
         }
     }
@@ -168,32 +165,23 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
     private void configCallUI() {
         Log.d(TAG, "configCallUI");
 
-        btnMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onCLick");
-                sendIntent(Constants.ACTION_TOGGLE_MUTE);
-                isMuted = !isMuted;
-                applyFabState(btnMute, isMuted);
-            }
+        btnMute.setOnClickListener(v -> {
+            Log.d(TAG, "onCLick");
+            sendIntent(Constants.ACTION_TOGGLE_MUTE);
+            isMuted = !isMuted;
+            applyFabState(btnMute, isMuted);
         });
 
-        btnHangUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendIntent(Constants.ACTION_END_CALL);
-                finish();
+        btnHangUp.setOnClickListener(v -> {
+            sendIntent(Constants.ACTION_END_CALL);
+            finish();
 
-            }
         });
-        btnOutput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-                boolean isOnSpeaker = !audioManager.isSpeakerphoneOn();
-                audioManager.setSpeakerphoneOn(isOnSpeaker);
-                applyFabState(btnOutput, isOnSpeaker);
-            }
+        btnOutput.setOnClickListener(v -> {
+            AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+            boolean isOnSpeaker = !audioManager.isSpeakerphoneOn();
+            audioManager.setSpeakerphoneOn(isOnSpeaker);
+            applyFabState(btnOutput, isOnSpeaker);
         });
 
     }
@@ -208,9 +196,7 @@ public class BackgroundCallJavaActivity extends AppCompatActivity {
         } else {
             colorStateList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.accent));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            button.setBackgroundTintList(colorStateList);
-        }
+        button.setBackgroundTintList(colorStateList);
     }
 
     private void sendIntent(String action) {

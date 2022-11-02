@@ -211,7 +211,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
     private String formatCustomParams(Map<String,String> customParameters){
         if (!customParameters.isEmpty()) {
             JSONObject json = new JSONObject(customParameters);
-            return "|"+json.toString();
+            return "|"+json;
         }
         return "";
     }
@@ -632,7 +632,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
             }
 
             @Override
-            public void onConnected(Call call) {
+            public void onConnected(@NonNull Call call) {
                 // setAudioFocus(true);
                 Log.d(TAG, "onConnected");
 //                eventSink.success("LOG|Connected");
@@ -735,7 +735,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                             .build();
                     audioManager.requestAudioFocus(focusRequest);
                 } else {
-//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO) {
                         int focusRequestResult = audioManager.requestAudioFocus(
                                 new AudioManager.OnAudioFocusChangeListener() {
 
@@ -745,7 +745,7 @@ public class TwilioVoicePlugin implements FlutterPlugin, MethodChannel.MethodCal
                                 }, AudioManager.STREAM_VOICE_CALL,
                                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
                     }
-                //}
+                }
                 /*
                  * Start by setting MODE_IN_COMMUNICATION as default audio mode. It is
                  * required to be in this mode when playout and/or recording starts for

@@ -6,7 +6,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 
 import static android.content.Context.AUDIO_SERVICE;
 
@@ -15,14 +14,14 @@ public class SoundPoolManager {
     private boolean playing = false;
     private boolean loaded = false;
     private boolean playingCalled = false;
-    private float volume;
+    private final float volume;
     private SoundPool soundPool;
-    private int ringingSoundId;
+    private final int ringingSoundId;
     private int ringingStreamId;
-    private int disconnectSoundId;
+    private final int disconnectSoundId;
     private static SoundPoolManager instance;
-    private Vibrator vibrator;
-    private AudioManager audioManager;
+    private final Vibrator vibrator;
+    private final AudioManager audioManager;
     private SoundPoolManager(Context context) {
         // AudioManager audio settings for adjusting the volume
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
@@ -32,13 +31,9 @@ public class SoundPoolManager {
 
         // Load the sounds
         int maxStreams = 1;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            soundPool = new SoundPool.Builder()
-              .setMaxStreams(maxStreams)
-              .build();
-        } else {
-            soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-        }
+        soundPool = new SoundPool.Builder()
+          .setMaxStreams(maxStreams)
+          .build();
 
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
