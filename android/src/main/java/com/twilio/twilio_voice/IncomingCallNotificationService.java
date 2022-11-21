@@ -261,8 +261,6 @@ public class IncomingCallNotificationService extends Service {
             assert callerMe != null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 buildMissedCallNotification(callerMe, cancelledCallInvite.getTo());
-            }else{
-                buildMissedCallNotification(callerMe, cancelledCallInvite.getTo());
             }
         }
         endForeground();
@@ -285,7 +283,7 @@ public class IncomingCallNotificationService extends Service {
         Context context = getApplicationContext();
         SharedPreferences preferences = context.getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
         String callerName = preferences.getString(fromId, preferences.getString("defaultCaller", "Unknown caller"));
-        String title = getString(R.string.notification_missed_call, callerName);
+        String title = getString(R.string.notification_missed_call, callerId);
 
 
         Intent returnCallIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
