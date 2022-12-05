@@ -171,20 +171,12 @@ public class AnswerJavaActivity extends AppCompatActivity {
 
             tvUserName.setText(allNameUsed);
 
-            btnAnswer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onCLick");
-                    checkPermissionsAndAccept();
-                }
+            btnAnswer.setOnClickListener(v -> {
+                Log.d(TAG, "click: Call Accepted");
+                AnswerJavaActivity.this.checkPermissionsAndAccept();
             });
 
-            btnReject.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rejectCallClickListener();
-                }
-            });
+            btnReject.setOnClickListener(v -> AnswerJavaActivity.this.rejectCallClickListener());
         }
     }
 
