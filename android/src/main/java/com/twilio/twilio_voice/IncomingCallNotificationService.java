@@ -146,7 +146,7 @@ public class IncomingCallNotificationService extends Service {
         rejectIntent.setAction(Constants.ACTION_REJECT);
         rejectIntent.putExtra(Constants.INCOMING_CALL_INVITE, callInvite);
         rejectIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, notificationId);
-      endingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+       PendingIntent piRejectIntent = PendingIntent.getService(getApplicationContext(), 0, rejectIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent acceptIntent = new Intent(getApplicationContext(), IncomingCallNotificationService.class);
         acceptIntent.setAction(Constants.ACTION_ACCEPT);
