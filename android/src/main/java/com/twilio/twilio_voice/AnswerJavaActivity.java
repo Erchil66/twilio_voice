@@ -163,9 +163,9 @@ public class AnswerJavaActivity extends AppCompatActivity {
             String firstname = activeCallInvite.getCustomParameters().get("firstname");
             String lastname = activeCallInvite.getCustomParameters().get("lastname");
             String phoneNum = activeCallInvite.getFrom();
-            Log.d(TAG,firstname.toString());
-            Log.d(TAG,lastname.toString());
-            Log.d(TAG,phoneNum.toString());
+            Log.d(TAG,firstname);
+            Log.d(TAG,lastname);
+            Log.d(TAG,phoneNum);
             
             String allNameUsed = firstname +" "+ lastname;
 //            if(fromName == null) {
@@ -174,13 +174,26 @@ public class AnswerJavaActivity extends AppCompatActivity {
 
 
             tvUserName.setText(allNameUsed);
-
-            btnAnswer.setOnClickListener(v -> {
-                Log.d(TAG, "click: Call Accepted");
-                AnswerJavaActivity.this.checkPermissionsAndAccept();
+            btnAnswer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onCLick");
+                    checkPermissionsAndAccept();
+                }
             });
 
-            btnReject.setOnClickListener(v -> AnswerJavaActivity.this.rejectCallClickListener());
+            btnReject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rejectCallClickListener();
+                }
+            });
+//            btnAnswer.setOnClickListener(v -> {
+//                Log.d(TAG, "click: Call Accepted");
+//                AnswerJavaActivity.this.checkPermissionsAndAccept();
+//            });
+//
+//            btnReject.setOnClickListener(v -> AnswerJavaActivity.this.rejectCallClickListener());
         }
     }
 
@@ -205,18 +218,37 @@ public class AnswerJavaActivity extends AppCompatActivity {
         acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, activeCallNotificationId);
         Log.d(TAG, "Clicked accept startService");
         startService(acceptIntent);
+//        Log.d(TAG, "isLocked: " + isLocked() + " appHasStarted: " + TwilioVoicePlugin.appHasStarted);
+        finish();
         if (TwilioVoicePlugin.hasStarted) {
+            Log.d(TAG, "AnswerJavaActivity Finish");
             finish();
-        }else{
+        }
+        else {
+            Log.d(TAG, "Answering call");
             activeCallInvite.accept(this, callListener);
             notificationManager.cancel(activeCallNotificationId);
         }
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
-        String caller = preferences.getString("isOnForeground", preferences.getString("isOnForeground", "false"));
-        if(caller.equals("true")){
-            activeCallInvite.accept(this, callListener);
-            notificationManager.cancel(activeCallNotificationId);
-        }
+//        Log.d(TAG, "Accepting call");
+//        Intent acceptIntent = new Intent(this, IncomingCallNotificationService.class);
+//        acceptIntent.setAction(Constants.ACTION_ACCEPT);
+//        acceptIntent.putExtra(Constants.INCOMING_CALL_INVITE, activeCallInvite);
+//        acceptIntent.putExtra(Constants.ACCEPT_CALL_ORIGIN, 1);
+//        acceptIntent.putExtra(Constants.INCOMING_CALL_NOTIFICATION_ID, activeCallNotificationId);
+//        Log.d(TAG, "Clicked accept startService");
+//        startService(acceptIntent);
+//        if (TwilioVoicePlugin.hasStarted) {
+//            finish();
+//        }else{
+//            activeCallInvite.accept(this, callListener);
+//            notificationManager.cancel(activeCallNotificationId);
+//        }
+//        SharedPreferences preferences = getApplicationContext().getSharedPreferences(TwilioPreferences, Context.MODE_PRIVATE);
+//        String caller = preferences.getString("isOnForeground", preferences.getString("isOnForeground", "false"));
+//        if(caller.equals("true")){
+//            activeCallInvite.accept(this, callListener);
+//            notificationManager.cancel(activeCallNotificationId);
+//        }
         
         // if(!TwilioVoicePlugin.hasStarted){
         //     activeCallInvite.accept(this, callListener);

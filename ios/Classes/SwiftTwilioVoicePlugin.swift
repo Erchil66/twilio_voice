@@ -1245,13 +1245,14 @@ public class SwiftTwilioVoicePlugin: NSObject, FlutterPlugin,  FlutterStreamHand
         }
         else if flutterCall.method == "answer" {
             // nothing to do, call handled by CallKit
-        }else if flutterCall.method == "getParams"{
-            
-            let haveData:String = finaleSTL!.trimmingCharacters(in: .whitespaces) ?? "";
-            //
-            result(haveData)
-            return;
         }
+        // else if flutterCall.method == "getParams"{
+            
+        //     let haveData:String = finaleSTL!.trimmingCharacters(in: .whitespaces) ?? "";
+        //     //
+        //     result(haveData)
+        //     return;
+        // }
 
         else if flutterCall.method == "unregister" {
             guard let deviceToken = deviceToken else {
