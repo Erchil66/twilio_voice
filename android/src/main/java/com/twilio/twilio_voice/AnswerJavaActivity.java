@@ -163,14 +163,14 @@ public class AnswerJavaActivity extends AppCompatActivity {
             String firstname = activeCallInvite.getCustomParameters().get("firstname");
             String lastname = activeCallInvite.getCustomParameters().get("lastname");
             String phoneNum = activeCallInvite.getFrom();
-            Log.d(TAG,firstname);
-            Log.d(TAG,lastname);
-            Log.d(TAG,phoneNum);
-            
-            String allNameUsed = firstname +" "+ lastname;
-//            if(fromName == null) {
-//                fromName = getString(R.string.unknown_caller);
-//            }
+            // Log.d(TAG,firstname);
+            // Log.d(TAG,lastname);
+            // Log.d(TAG,phoneNum);
+
+            String allNameUsed =
+                    (firstname == null || firstname.isEmpty())  && (lastname == null || lastname.isEmpty()) ?
+                            phoneNum :firstname +" "+ lastname;
+
 
 
             tvUserName.setText(allNameUsed);
@@ -266,13 +266,23 @@ public class AnswerJavaActivity extends AppCompatActivity {
         
     }
 
-    private void startAnswerActivity(Call call) {
-        Intent intent = new Intent(this, BackgroundCallJavaActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constants.CALL_FROM, call.getFrom());
-        startActivity(intent);
-        Log.d(TAG, "Connected");
+     private void startAnswerActivity(Call call) {
+
+       Intent intent = new Intent(this, BackgroundCallJavaActivity.class);
+       intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String firstname = activeCallInvite.getCustomParameters().get("firstname");
+        String lastname = activeCallInvite.getCustomParameters().get("lastname");
+        String phoneNum = activeCallInvite.getFrom();
+        String allNameUsed =
+                (firstname == null || firstname.isEmpty())  && (lastname == null || lastname.isEmpty()) ?
+                        phoneNum :firstname +" "+ lastname;
+       intent.putExtra(Constants.CALL_FROM, allNameUsed);
+       startActivity(intent);
+//        gotoAppOwn();
+
+        Log.d(TAG, "Connected"+allNameUsed);
+
     }
 
     private void endCall() {
